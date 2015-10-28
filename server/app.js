@@ -5,7 +5,7 @@ var io   = require('socket.io')(http);
 
 var PORT = 8080;
 
-app.use("/", express.static( __dirname + '/client' ));
+app.use("/", express.static( __dirname + '/../client' ));
 
 io.on('connection', function(socket){
 	console.log('a user connected');
