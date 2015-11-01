@@ -15,7 +15,8 @@ var Game = function( server ){
 	var callbacks = {
 		add: function(){},
 		remove: function(){},
-		update: function(){}	
+		update: function(){},
+		tick: function(){}
 	};
 
 	var on = function(name,callback){
@@ -47,11 +48,12 @@ var Game = function( server ){
 			callbacks.update(e);
 		});
 	};
-	var loop = function(){
+	var tick = function(){
 		if(running){
 			update();
+			callbacks.tick();
 		}
-		setTimeout(loop,setTimeoutInterval);
+		setTimeout(tick,setTimeoutInterval);
 	};
 	var start = function(){
 		running = true;
@@ -61,7 +63,7 @@ var Game = function( server ){
 	};
 	return {
 		update: update,
-		loop: loop,
+		tick: tick,
 		start: start,
 		stop: stop,
 		players: players,

@@ -2,7 +2,7 @@ var Game          = require('./Game.js'),
 	PacketHandler = require('./PacketHandler.js'),
 	PacketFactory = require("./PacketFactory");
 
-var GameServer = function(){
+var GameServer = function( io ){
 
 	var game   = Game();
 	var handle = PacketHandler( game );
@@ -15,12 +15,14 @@ var GameServer = function(){
 	* Emits the accumulated packets to every client.
 	*/
 	var sendAll = function(){
-
+		packets.forEach(function(packet){
+			io.emit('packet', packet);	
+		});
+		packets = [];
 	};
 
 	// Adds callbacks
 	var setup = function(){
-
 		// When a new player is added, add a packet to the list.
 		game.on('add', function( ply ){
 			packets.push(PacketFactory_.add(ply));
@@ -36,18 +38,27 @@ var GameServer = function(){
 			packets.push(PacketFactory_.position(ply));
 		});
 
+		game.on('tick', function(){
+			sendAll();
+		});
 	};
 
 	var onDisconnect = function( socket ){
+		console.log("LOG (GameServer::onDisconnect)" + socket.id);
 		if(sockets[socket.id]){
+			if(socket.player){
+				game.removePlayer(socket.player);
+			}
 			delete sockets[socket.id];
 		}else{
-			console.log("WARNING (GameServer::onDisconnect) ");
+			console.log("WARNING (GameServer::onDisconnect) Attempted to remove unmapped socket.");
 		}
 	};
 
 	var onConnect = function( socket ){
 		
+		console.log("LOG (GameServer::onConnect)" + socket.id);
+
 		sockets[socket.id] = socket;
 
 		// Initialize player
@@ -58,6 +69,10 @@ var GameServer = function(){
 		// Add socket event listener
 		socket.on("packet", function(packet){
 			PacketHandler_.handle( socket, packet );
+		});
+
+		socket.on('disconnect', function(){
+			onDisconnect(socket);
 		});
 
 		var state = PacketFactory_.state(game);
