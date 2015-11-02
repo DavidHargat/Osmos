@@ -2,8 +2,8 @@ var RandomBubble = function( options ){
 
 	var vx = (Math.random()-Math.random())*0.5,
 		vy = (Math.random()-Math.random())*0.5,
-		x = Math.round(Math.random()* (renderer.width+256+128) )-128,
-		y = Math.round(Math.random()* (renderer.height+256+128) )-128,
+		x = Math.round(Math.random()* (options.globalWidth+256+128) )-128,
+		y = Math.round(Math.random()* (options.globalHeight+256+128) )-128,
 		radius = (Math.random()*16)+4,
 		fillColor = Math.floor(Math.random()*(255*255*255)/600),
 		borderColor = Math.floor(Math.random()*(255*255*255)/600);
@@ -31,8 +31,8 @@ var RandomBubble = function( options ){
 		var drawX = x() + options.world.x;
 		var drawY = y() + options.world.y;
 
-		var w = renderer.width;
-		var h = renderer.height;
+		var w = options.globalWidth;
+		var h = options.globalHeight;
 
 		var leftBound   = 0-128;
 		var rightBound  = w+256;

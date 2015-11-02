@@ -5,19 +5,27 @@
 var ClientPacketHandler = function( game ){
 
 	var update = function( packet ){
-		var ent = game.get(packet.id);
-		ent.pos(packet.x, packet.y);
+		var ply = game.getPlayer(packet.id);
+		ply.pos(packet.x, packet.y);
 	};
 
 	var add = function( packet ){
 		var player = Player(packet.options);
-		game.add(player);
+		game.addPlayer(player);
+	};
+
+	var remove = function( packet ){
+		var ply = game.getPlayer(packet.id);
+		if(ply){
+			game.removePlayer(ply);
+		}
 	};
 
 	var handle = function( packet ){
 		var router = {
 			update: update,
-			add: add
+			add: add,
+			remove: remove
 		};
 
 		if( router[packet.header] ){

@@ -3,7 +3,7 @@
 * Game also contains a {PIXI.Container} object called 'world'
 * which contains all graphical components.
 */
-var Game = function( stage ){
+var Game = function( stage, width, height ){
 	
 	/** Converts arguments to a proper Array. */
 	var args = function(rawArgs){
@@ -19,7 +19,7 @@ var Game = function( stage ){
 
 	var background = new PIXI.Container();
 
-	var camera = new Camera( world, renderer.width, renderer.height );
+	var camera = new Camera( world, width, height );
 
 	var keystate = Keyboard().state;
 
@@ -118,7 +118,9 @@ var Game = function( stage ){
 		for(var i=0;i<100;i++){
 			var bub = RandomBubble({
 				world: world,
-				stage: stage
+				stage: stage,
+				globalWidth: width,
+				globalHeight: height
 			});
 			background.addChild(bub.graphics);
 			addBubble(bub);
@@ -126,8 +128,8 @@ var Game = function( stage ){
 
 		ply = Bubble({
 			world: world,
-			x: renderer.width/2,
-			y: renderer.height/2,
+			x: width/2,
+			y: height/2,
 			radius: 64,
 			fillColor: 0x87FFA2,
 			borderColor: 0xFFFFFF,
@@ -144,6 +146,7 @@ var Game = function( stage ){
 	return {
 		stage: stage,
 		world: world,
+		keystate: keystate,
 		background: background,
 		camera: camera,
 		addPlayer: addPlayer,
