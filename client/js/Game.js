@@ -27,24 +27,19 @@ var Game = function( stage ){
 	stage.addChild( world );
 	
 	/** A list of entities that AREN'T synchronized to the server. */
-	var clientList = []; 
+	var bubbles = []; 
 
-	/** A list of entities that ARE synchronized to the server. */
-	var players = [];
-
-	/** A map of {ServerEntity}s to their respective ids. */
+	/** A map of {Player}s to their respective ids. */
 	var playerTable = {};
 
 	/**
-	* Add a ServerEntity to the players and playerTable 
-	* (defined seperately for optimal lookup and iteration).
-	* @param {ServerEntity} ent
+	* Add a Player to the playerTable.
+	* @param {...}
 	*/
 	var addPlayer = function(){
-		args(arguments).forEach(function(ent){
-			world.addChild(ent.graphics);
-			players.push(ent);
-			playerTable[ent.id]=ent;
+		args(arguments).forEach(function(ply){
+			world.addChild(ply.graphics);
+			playerTable[ply.id]=ply;
 		});
 	};
 	/**
@@ -56,42 +51,35 @@ var Game = function( stage ){
 		if( playerTable[id] ){
 			return playerTable[id];
 		}else{
-
 			console.log("ERROR (Game::getPlayer) Attempted to get an invalid id '" + id + "'");
 			return;
 		}
 	};
 	/**
-	* Removes a {Player} from the game.
+	* Removes a {Player} from the playerTable.
 	* @param {Player} ent
 	*/
 	var removePlayer = function(ent){
-		var i = players.indexOf(ent);
-		ent.splice(i,1);
 		if( playerTable[ent.id] ){
 			delete playerTable[ent.id];	
 		}else{
 			console.log("ERROR (Game::removePlayer) Entity was not found in playerTable.");
 		}
 	};
+
 	/**
-	* Add a ClientEntity to the clientList.
-	* @param {ClientEntity} ent
+	* Add a bubble to the bubble list.
+	* @param {Bubble} bub
 	*/
-	var addClientEntity = function(){
-		args(arguments).forEach(function(ent){
-			if(ent.addToWorld) world.addChild(ent.graphics);
-			clientList.push(ent);
-		});
+	var addBubble = function(bub){
+		bubbles.push(bub);
 	};
+
 	/** 
-	* Updates all the entities in the clientList. 
-	* This isn't (yet) neccesary for the players because
-	* their logic resides on the server, whereas the client
-	* entities are independent. 
+	* updates every bubble.
 	*/
-	var updateClientList = function(){
-		clientList.forEach(function(ent){
+	var updateBubbles = function(){
+		bubbles.forEach(function(ent){
 			ent.update();
 		});
 	};
@@ -100,13 +88,12 @@ var Game = function( stage ){
 
 	var update = function(){
 
-		updateClientList();
+		updateBubbles();
 
 		camera.target(ply.x(),ply.y());
 		camera.update();
 
 		var speed = 0.5;
-
 		
 		if(keystate.left)
 			ply.accelerate(-speed,0);
@@ -129,15 +116,14 @@ var Game = function( stage ){
 		background.filters = [f];
 	
 		for(var i=0;i<100;i++){
-			var e = RandomBubble({
+			var bub = RandomBubble({
 				world: world,
 				stage: stage
 			});
-			background.addChild(e.graphics);
-			addClientEntity(e);
+			background.addChild(bub.graphics);
+			addBubble(bub);
 		}
 
-		
 		ply = Bubble({
 			world: world,
 			x: renderer.width/2,
@@ -150,8 +136,8 @@ var Game = function( stage ){
 		});
 
 		camera.set(ply.x(),ply.y());
-	
-		addClientEntity(ply);
+		world.addChild(ply.graphics);
+		addBubble(ply);
 		
 	};
 
@@ -160,12 +146,11 @@ var Game = function( stage ){
 		world: world,
 		background: background,
 		camera: camera,
-		players: players,
 		addPlayer: addPlayer,
 		removePlayer: removePlayer,
 		getPlayer: getPlayer,
-		clientList: clientList,
-		updateClientList: updateClientList,
+		bubbles: bubbles,
+		updateBubbles: updateBubbles,
 		update: update,
 		setup: setup
 	};
