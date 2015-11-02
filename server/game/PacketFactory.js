@@ -9,11 +9,18 @@ var PacketFactory = function(){
 	* @param {Entity} ent - the entity we're sending to the client.
 	*/
 	var add = function( ply ){
-		return {
-			header: "add",
+		var options = {
 			x: ply.position.x,
 			y: ply.position.y,
-			id: ply.position.id
+			radius: ply.getRadius(),
+			borderColor: 0xFFFFFF,
+			fillColor: 0x000000,
+			alpha: 0.3
+		};
+
+		return {
+			header: "add",
+			options: options
 		};
 	};
 

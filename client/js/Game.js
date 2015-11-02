@@ -1,96 +1,3 @@
-
-/**
-* {ClientPacketHandler} interprets packets from the
-* server and respectively updates the state of the client.
-*/
-var ClientPacketHandler = function( game ){
-
-	var handlePosition = function( packet ){
-		var ent = game.get(packet.id);
-		ent.pos(packet.x, packet.y);
-	};
-
-	var handleAdd = function( packet ){
-		var type = packet.type;
-
-		var router = {
-			"circle": Circle
-		};
-
-		if( router[type] ){
-			options.world = game.world;
-			router[type](packet.options);
-		}else{
-			console.log("ERROR (PacketHandler::handlePacketAdd) Invalid Entity Type '" + type + "'");
-		}
-	};
-
-	var handle = function( packet ){
-		var router = {
-			"position": handlePosition,
-			"add": handleAdd
-		};
-
-		if( router[packet.header] ){
-			router[packet.header]( packet );
-		}else{
-			console.log("ERROR (PacketHandler::handlePacket) Invalid packet header '" + packet.header + "'" );
-		}
-	};
-
-	return {
-		handle: handle
-	};
-};
-
-var Camera = function( world ){
-	var x  = 0,
-		y  = 0,
-		tx = 4,
-		ty = 4,
-		set,target,update;
-
-	set = function(px,py){
-		x = px;
-		y = py;
-		world.x = -px + renderer.width/2;
-		world.y = -py + renderer.height/2;
-	};
-
-	target = function(px,py){
-		tx = px;
-		ty = py;
-	};
-
-	update = function(){
-		var x1=x,
-			y1=y,
-			x2=tx,
-			y2=ty;
-
-		var d = Math.sqrt(
-			((x2 - x1) * (x2 - x1))+
-			((y2 - y1) * (y2 - y1)) 
-		);
-
-		if( d > 4){
-			var dx = (x2-x1)/d;
-			var dy = (y2-y1)/d;
-
-			x += dx*(d/16);
-			y += dy*(d/16);
-
-			set(x,y);
-		}
-	};
-
-	return {
-		set: set,
-		target: target,
-		update: update
-	};
-};
-
 /**
 * Game contains and manages both Server and Client entities.
 * Game also contains a {PIXI.Container} object called 'world'
@@ -123,48 +30,48 @@ var Game = function( stage ){
 	var clientList = []; 
 
 	/** A list of entities that ARE synchronized to the server. */
-	var serverList = [];
+	var players = [];
 
 	/** A map of {ServerEntity}s to their respective ids. */
-	var serverTable = {};
+	var playerTable = {};
 
 	/**
-	* Add a ServerEntity to the serverList and serverTable 
+	* Add a ServerEntity to the players and playerTable 
 	* (defined seperately for optimal lookup and iteration).
 	* @param {ServerEntity} ent
 	*/
-	var addServerEntity = function(){
+	var addPlayer = function(){
 		args(arguments).forEach(function(ent){
 			world.addChild(ent.graphics);
-			serverList.push(ent);
-			serverTable[ent.id]=ent;
+			players.push(ent);
+			playerTable[ent.id]=ent;
 		});
 	};
 	/**
-	* Gets a {ServerEntity} from the serverTable, returns 
+	* Gets a {Player} from the playerTable, returns 
 	* undefined if the given id is not found.
 	* @param {number} id
 	*/
-	var getServerEntity = function(id){
-		if( serverTable[id] ){
-			return serverTable[id];
+	var getPlayer = function(id){
+		if( playerTable[id] ){
+			return playerTable[id];
 		}else{
 
-			console.log("ERROR (Game::getServerEntity) Attempted to get an invalid id '" + id + "'");
+			console.log("ERROR (Game::getPlayer) Attempted to get an invalid id '" + id + "'");
 			return;
 		}
 	};
 	/**
-	* Removes a {ServerEntity} from the game.
-	* @param {ServerEntity} ent
+	* Removes a {Player} from the game.
+	* @param {Player} ent
 	*/
-	var removeServerEntity = function(ent){
-		var i = serverList.indexOf(ent);
+	var removePlayer = function(ent){
+		var i = players.indexOf(ent);
 		ent.splice(i,1);
-		if( serverTable[ent.id] ){
-			delete serverTable[ent.id];	
+		if( playerTable[ent.id] ){
+			delete playerTable[ent.id];	
 		}else{
-			console.log("ERROR (Game::removeServerEntity) Entity was not found in serverTable.");
+			console.log("ERROR (Game::removePlayer) Entity was not found in playerTable.");
 		}
 	};
 	/**
@@ -179,7 +86,7 @@ var Game = function( stage ){
 	};
 	/** 
 	* Updates all the entities in the clientList. 
-	* This isn't (yet) neccesary for the serverList because
+	* This isn't (yet) neccesary for the players because
 	* their logic resides on the server, whereas the client
 	* entities are independent. 
 	*/
@@ -247,10 +154,10 @@ var Game = function( stage ){
 		world: world,
 		background: background,
 		camera: camera,
-		serverList: serverList,
-		addServerEntity: addServerEntity,
-		removeServerEntity: removeServerEntity,
-		getServerEntity: getServerEntity,
+		players: players,
+		addPlayer: addPlayer,
+		removePlayer: removePlayer,
+		getPlayer: getPlayer,
 		clientList: clientList,
 		updateClientList: updateClientList,
 		update: update,

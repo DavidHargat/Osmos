@@ -2,9 +2,16 @@
 var Player = function( options ){
 	var socket = options.socket;
 
+	var x_  = options.x;
+	var y_  = options.y;
+	var r_  = options.radius;
+	var id_ = options.id;
+
+	var id = id_;
+
 	var position = {
-		x: 0,
-		y: 0
+		x: x_,
+		y: y_
 	};
 
 	var velocity = {
@@ -12,7 +19,7 @@ var Player = function( options ){
 		y: 0
 	};
 
-	var radius = 32;
+	var radius = r_;
 
 	var touches = function( other ){
 		var r1 = radius;
@@ -38,7 +45,7 @@ var Player = function( options ){
 		// move
 		position.x += velocity.x;
 		positoin.y += velocity.y;
-		
+
 	};
 
 	var distance = function( other ){
@@ -60,10 +67,16 @@ var Player = function( options ){
 		right: false
 	};
 
+	var getRadius = function(){
+		return radius;
+	};
+
 	return {
+		id: id,
 		position: position,
 		controller: controller,
 		update: update,
+		getRadius: getRadius,
 		socket: socket
 	};
 };

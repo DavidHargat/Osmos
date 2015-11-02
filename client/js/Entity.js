@@ -1,8 +1,10 @@
 var Entity = function( options ){
 	var graphics = new PIXI.Container();
 	
-	var x,y,width,height,pos,move,size,distance;
+	var x,y,radius_,radius,pos,move,size,distance;
 	
+	radius_ = options.radius || 4;
+
 	x = function( px ){
 		if( typeof( px ) === "number" ) graphics.x = px;
 		return graphics.x;
@@ -11,22 +13,15 @@ var Entity = function( options ){
 		if( typeof( py ) === "number" ) graphics.y = py;
 		return graphics.y;	
 	};
-	width = function( pw ){
-		if( typeof( pw ) === "number" ) graphics.width = pw;
-		return graphics.width;
-	};
-	height = function( ph ){
-		if( typeof( ph ) === "number" ) graphics.width = ph;
-		return graphics.height;
+	radius = function( pr ){
+		if( typeof( pr ) === "number" ) radius = pw;
+		return radius;
 	};
 	pos = function( px, py ){
 		return { x: x( px ), y: y( py ) };
 	};
 	move = function( px , py ){
 		return pos( x() + px , y() + py );
-	};
-	size = function( pw , ph ){
-		return { width: width( pw ), height: height( ph ) };
 	};
 	distance = function( other ){
 		var x1 = x(),
@@ -56,15 +51,12 @@ var Entity = function( options ){
 	var has_ = function(v){return !(typeof(v)==="undefined");};
 	if( has_(options.x)      ) x(options.x);
 	if( has_(options.y)      ) y(options.y);
-	if( has_(options.width)  ) width(options.width);
-	if( has_(options.height) ) height(options.height);
 	//console.log(x(),y());
 
 	return {
 		x: x,
 		y: y,
-		width: width,
-		height: height,
+		radius: radius,
 		pos: pos,
 		move: move,
 		size: size,
@@ -73,26 +65,4 @@ var Entity = function( options ){
 		graphics: graphics,
 		addToWorld: addToWorld
 	};
-};
-
-// Doesn't care about the server
-var ClientEntity = function( options ){
-	var parent = Entity( options );
-
-	var world = options.world;
-
-	parent.update = function(){
-		// Placeholder
-	};
-
-	return parent;
-};
-
-// Get synchronized to the server.
-var ServerEntity = function( options ){
-	var parent = Entity( options );
-
-	parent.id = options.id;
-
-	return parent;
 };
