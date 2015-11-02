@@ -1,3 +1,9 @@
+/**
+* A randomized bubble to be rendered on the client only.
+* Had a random size, position, color, and velocity.
+* Also randomly shifts velocity.
+* @param {Object} options
+*/
 var RandomBubble = function( options ){
 
 	var vx = (Math.random()-Math.random())*0.5,
@@ -18,15 +24,18 @@ var RandomBubble = function( options ){
 		fillColor: fillColor,
 		alpha: 0.3
 	});
-
-	parent.addToWorld = false;
-
+	
 	var move = parent.move,
 		x    = parent.x,
 		y    = parent.y;
 	
 	var drag, checkBounds, randomMovement, update;
 
+	/**
+	* When the bubble gets too far off the screen, it teleports
+	* to the other side of screen to give the impression of an
+	* infinite field of bubbles.
+	*/
 	checkBounds = function(){
 		var drawX = x() + options.world.x;
 		var drawY = y() + options.world.y;
@@ -60,18 +69,25 @@ var RandomBubble = function( options ){
 		}
 	};
 
-	randomMovement = function(){
-		if( (Math.round((Math.random()*2))==1) ){
-			vx += (Math.random()-Math.random())/10;
-			vy += (Math.random()-Math.random())/10;
-		}
+	/**
+	* Randomly increment/decrement the velocity.
+	*/
+	randomMovement = function(){	
+		vx += (Math.random()-Math.random())/10;
+		vy += (Math.random()-Math.random())/10;
 	};
 
+	/**
+	* Applies 'drag' to the velocity to keep bubbles from zooming around.
+	*/
 	drag = function(){
 		vx /= 1.01;
 		vy /= 1.01;
 	};
 
+	/**
+	* Update the bubble.
+	*/
 	update = function(){
 		checkBounds();
 		randomMovement();
