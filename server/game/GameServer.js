@@ -6,7 +6,6 @@ var Game          = require('./Game.js'),
 var GameServer = function( io ){
 
 	var game   = Game();
-	var handle = PacketHandler( game );
 	var PacketHandler_ = PacketHandler( game );
 	var PacketFactory_ = PacketFactory();
 	var packets = [];
@@ -17,8 +16,12 @@ var GameServer = function( io ){
 	* Emits the accumulated packets to every client.
 	*/
 	var sendAll = function(){
-		packets.forEach(function(packet){
-			io.emit('packet', packet);	
+		//packets.forEach(function(packet){
+			//io.emit('packet', packet);	
+		//});
+		io.emit('packet',{
+			header:'list',
+			list: packets
 		});
 		packets = [];
 	};

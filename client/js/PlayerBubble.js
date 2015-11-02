@@ -13,8 +13,9 @@ var PlayerBubble = function( options ){
 	};
 
 	var tween = function(){
-		parent.pos(targetX,targetY);
 		/*
+		parent.pos(targetX,targetY);
+		*/
 		var position = parent.pos();
 		var x1=position.x,
 			y1=position.y,
@@ -30,12 +31,11 @@ var PlayerBubble = function( options ){
 			var dx = (x2-x1)/d;
 			var dy = (y2-y1)/d;
 
-			var nx = position.x+dx*(d/2);
-			var ny = position.y+dy*(d/2);
+			var nx = position.x+dx*(d/4);
+			var ny = position.y+dy*(d/4);
 			
 			parent.pos(nx,ny);
 		}
-		*/
 	};
 
 	parent.update = function(){

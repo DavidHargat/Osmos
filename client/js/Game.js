@@ -137,6 +137,8 @@ var Game = function( stage, width, height ){
 		f.blur  = 2;
 		background.filters = [f];
 	
+		/*
+		*/
 		for(var i=0;i<100;i++){
 			var bub = RandomBubble({
 				world: world,
