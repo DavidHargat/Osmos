@@ -59,8 +59,8 @@ var Player = function( options ){
 			var dy = (position.y-center.position.y)/d;
 			position.x -= dx*(d/100);
 			position.y -= dy*(d/100);
-			velocity.x *= -dx;
-			velocity.y *= -dx;
+			velocity.x /= 1.1;
+			velocity.y /= 1.1;
 		}
 	};
 

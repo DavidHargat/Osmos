@@ -9,15 +9,15 @@ var GameClient = function( socket, stage ){
 	var w = window.innerWidth;
 	var h = window.innerHeight;
 
-	var maxWidth = 500;
+	var maxWidth = 600;
 
 	var CANVAS_WIDTH = w+(maxWidth-w);
 	var CANVAS_HEIGHT = (CANVAS_WIDTH*(h/w));
 
-	//if(w <= maxWidth){
+	if(w <= maxWidth){
 		CANVAS_WIDTH = w;
 		CANVAS_HEIGHT = h;
-	//}
+	}
 
 	var renderer = new PIXI.CanvasRenderer(CANVAS_WIDTH, CANVAS_HEIGHT, {view:myCanvas});
 	renderer.autoResize = true;

@@ -19,11 +19,8 @@ var GameServer = function( io ){
 	* Emits the accumulated packets to every client.
 	*/
 	var sendAll = function(){
-		//packets.forEach(function(packet){
-			//io.emit('packet', packet);	
-		//});
-		io.emit('packet',{
-			header:'list',
+		io.emit('packet', {
+			header: 'list',
 			list: packets
 		});
 		packets = [];
@@ -31,6 +28,7 @@ var GameServer = function( io ){
 
 	// Adds callbacks
 	var setup = function(){
+		
 		// When a new player is added, add a packet to the list.
 		game.on('add', function( ply ){
 			packets.push(PacketFactory_.add(ply));
@@ -46,28 +44,24 @@ var GameServer = function( io ){
 			packets.push(PacketFactory_.update(ply));
 		});
 
-		//game.on('tick', function(){
-			//sendAll();
-		//});
-	
-		//game.tick();
-		
-		game.start();
+	};
 
+	var run = function(){
 		var tickInterval = 1000/60;
 		var netInterval = 40;
 
+		// Continously run Game update logic.
 		setInterval(game.tick, tickInterval);
+
+		// Continously run GameServer networking logic.
 		setInterval(sendAll, netInterval);
 	};
 
 	var onDisconnect = function( socket ){
-		console.log("LOG (GameServer::onDisconnect)" + socket.id);
 		if(sockets[socket.id]){
 			if(socket.player){
 				game.remove(socket.player);
 				console.log("LOG (GameServer::onDisconnect) Removed Player " + socket.player.id);
-			}else{
 			}
 			delete sockets[socket.id];
 		}else{
@@ -76,8 +70,6 @@ var GameServer = function( io ){
 	};
 
 	var onConnect = function( socket ){
-		
-
 		sockets[socket.id] = socket;
 
 		// Initialize player
@@ -88,33 +80,40 @@ var GameServer = function( io ){
 			radius: 10 + Math.round(Math.random()*10),
 			id: playerIndex
 		});
+
+		// Increment the playerIndex (so each player gets a unique id)
 		playerIndex++;
 
-		// Add socket event listener
+		// Handle incoming packets
 		socket.on("packet", function(packet){
 			PacketHandler_.handle( socket, packet );
 		});
 
+		// Handle disconnection
 		socket.on('disconnect', function(){
 			onDisconnect(socket);
 		});
 
-		var state = PacketFactory_.state(game);
-		socket.emit("packet", state);
+		// Send the current state of the game to the new player.
+		socket.emit("packet", PacketFactory_.state(game));
 
+		// Add the player to the game.
 		game.add(socket.player);
 
+		// Tell the player their id.
 		socket.emit("packet", {
 			header: "setPlayerId",
 			id: socket.player.id
 		});
 
+		// log
 		console.log("LOG (GameServer::onConnect) Added Player " + socket.player.id);
 	};
 
 	return {
 		onConnect: onConnect,
-		setup: setup
+		setup: setup,
+		run: run
 	};
 };
 

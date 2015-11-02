@@ -137,9 +137,7 @@ var Game = function( stage, width, height ){
 		f.blur  = 2;
 		background.filters = [f];
 	
-		/*
-		*/
-		for(var i=0;i<100;i++){
+		for(var i=0;i<16;i++){
 			var bub = RandomBubble({
 				world: world,
 				stage: stage,
@@ -164,23 +162,6 @@ var Game = function( stage, width, height ){
 		});
 
 		background.addChild(wBorder.graphics);
-
-		/*
-		ply = Bubble({
-			world: world,
-			x: width/2,
-			y: height/2,
-			radius: 64,
-			fillColor: 0x87FFA2,
-			borderColor: 0xFFFFFF,
-			alpha: 0.5,
-			borderWidth: 4
-		});
-		camera.set(ply.x(),ply.y());
-		world.addChild(ply.graphics);
-		addBubble(ply);
-		*/
-		
 	};
 
 	return {

@@ -6,15 +6,15 @@
 */
 var RandomBubble = function( options ){
 
-	var mod = 256;
+	var mod = 512;
 
 	var vx = (Math.random()-Math.random())*0.5,
 		vy = (Math.random()-Math.random())*0.5,
-		x = Math.round(Math.random()* (options.globalWidth+(mod*2)+mod)-mod),
-		y = Math.round(Math.random()* (options.globalHeight+(mod*2)+mod)-mod),
-		radius = (Math.random()*64)+4,
-		fillColor = Math.floor(Math.random()*(255*255*255)/600),
-		borderColor = Math.floor(Math.random()*(255*255*255)/600);
+		x = Math.round(Math.random()* ( options.globalWidth+mod) )-(options.globalWidth/2)-(mod/2),
+		y = Math.round(Math.random()* ( options.globalHeight+mod) )-(options.globalHeight/2)-(mod/2),
+		radius = (Math.random()*256)+4,
+		fillColor = Math.round(Math.random()*(255*255*255)/1),
+		borderColor = Math.round(Math.random()*(255*255*255)/1);
 
 	var parent = Bubble({
 		x: x,
@@ -24,52 +24,14 @@ var RandomBubble = function( options ){
 		vy: vy,
 		borderColor: borderColor,
 		fillColor: fillColor,
-		alpha: 0.1
+		alpha: 0.05
 	});
 	
 	var move = parent.move,
 		x    = parent.x,
 		y    = parent.y;
 	
-	var drag, checkBounds, randomMovement, update;
-
-	/**
-	* When the bubble gets too far off the screen, it teleports
-	* to the other side of screen to give the impression of an
-	* infinite field of bubbles.
-	*/
-	checkBounds = function(){
-		var drawX = x() + options.world.x;
-		var drawY = y() + options.world.y;
-
-		var w = options.globalWidth;
-		var h = options.globalHeight;
-
-		var leftBound   = 0-mod;
-		var rightBound  = w+(mod*2);
-		var topBound    = 0-mod;
-		var bottomBound = h+(mod*2);
-
-		// too far left
-		if( drawX < leftBound ){
-			x( (0-options.world.x+w)+64 );
-		}
-
-		// too far right
-		if( drawX > rightBound ){
-			x( (0-options.world.x)-64 );
-		}
-
-		// too far up
-		if( drawY < topBound ){
-			y( (0-options.world.y+h)+64 );
-		}
-
-		// too far down
-		if( drawY > bottomBound ){
-			y( (0-options.world.y)-64 );
-		}
-	};
+	var drag, randomMovement, update;
 
 	/**
 	* Randomly increment/decrement the velocity.
@@ -91,7 +53,6 @@ var RandomBubble = function( options ){
 	* Update the bubble.
 	*/
 	update = function(){
-		checkBounds();
 		randomMovement();
 		drag();
 		move(vx, vy);

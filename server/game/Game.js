@@ -8,14 +8,22 @@ var Game = function( server ){
 	// Game Data
 	var players  = [];
 
-	// Callbacks
+	
 	var callbacks = {
 		add: function(){},
 		remove: function(){},
-		update: function(){},
-		tick: function(){}
+		update: function(){}
 	};
 
+	/**
+	* Define a callback for a certain a game event (psuedo-event?)
+	* this allows the GameServer to add logic after
+	* each of these events, for instance the
+	* GameServer will want to create a packet after each
+	* 'add' event so it can inform the clients.
+	* @param {String} name - the name of the callback.
+	* @param {function} callback - the callback itself.
+	*/
 	var on = function(name,callback){
 		if(typeof(callbacks[name])==="function"){
 			callbacks[name] = callback;
@@ -24,11 +32,19 @@ var Game = function( server ){
 		}
 	};
 
-	// Game Functions
+	/**
+	* Adds a player to the game.
+	* @param {Player} ply - the player to add.
+	*/
 	var add = function( ply ){
 		players.push(ply);
 		callbacks.add(ply);
 	};
+	
+	/**
+	* Removes a player from the game.
+	* @param {Player} ply - the player to remove.
+	*/
 	var remove = function( ply ){
 		var i = players.indexOf(ply);
 		if(i>-1){
@@ -38,33 +54,22 @@ var Game = function( server ){
 		}
 		callbacks.remove(ply);
 	};
-	var update = function(){
+
+	/**
+	* Updates the game logic.
+	*/
+	var tick = function(){
 		players.forEach(function(e){
 			// Players need to know about eachother to update
 			e.update( players );
 			callbacks.update(e);
 		});
 	};
-	var tick = function(){
-		if(running){
-			update();
-			callbacks.tick();
-		}
-	};
-	var start = function(){
-		running = true;
 
-	};
-	var stop = function(){
-		running = false;
-	};
 	return {
 		add: add,
 		remove: remove,
-		update: update,
 		tick: tick,
-		start: start,
-		stop: stop,
 		players: players,
 		on: on
 	};
