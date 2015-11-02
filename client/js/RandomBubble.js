@@ -6,11 +6,13 @@
 */
 var RandomBubble = function( options ){
 
+	var mod = 256;
+
 	var vx = (Math.random()-Math.random())*0.5,
 		vy = (Math.random()-Math.random())*0.5,
-		x = Math.round(Math.random()* (options.globalWidth+256+128) )-128,
-		y = Math.round(Math.random()* (options.globalHeight+256+128) )-128,
-		radius = (Math.random()*16)+4,
+		x = Math.round(Math.random()* (options.globalWidth+(mod*2)+mod)-mod),
+		y = Math.round(Math.random()* (options.globalHeight+(mod*2)+mod)-mod),
+		radius = (Math.random()*64)+4,
 		fillColor = Math.floor(Math.random()*(255*255*255)/600),
 		borderColor = Math.floor(Math.random()*(255*255*255)/600);
 
@@ -22,7 +24,7 @@ var RandomBubble = function( options ){
 		vy: vy,
 		borderColor: borderColor,
 		fillColor: fillColor,
-		alpha: 0.3
+		alpha: 0.1
 	});
 	
 	var move = parent.move,
@@ -43,10 +45,10 @@ var RandomBubble = function( options ){
 		var w = options.globalWidth;
 		var h = options.globalHeight;
 
-		var leftBound   = 0-128;
-		var rightBound  = w+256;
-		var topBound    = 0-128;
-		var bottomBound = h+256;
+		var leftBound   = 0-mod;
+		var rightBound  = w+(mod*2);
+		var topBound    = 0-mod;
+		var bottomBound = h+(mod*2);
 
 		// too far left
 		if( drawX < leftBound ){

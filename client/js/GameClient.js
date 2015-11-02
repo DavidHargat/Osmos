@@ -1,13 +1,27 @@
 var GameClient = function( socket, stage ){
 
-	var tickInterval = 100;
+	var tickInterval = 20;
 
 	// Setup PIXI
 	var myCanvas = document.getElementById("canvas");
 	var stage = new PIXI.Stage(0xFFFFFF);
-	var renderer = new PIXI.CanvasRenderer(800, 600, {view:myCanvas});
+	
+	var w = window.innerWidth;
+	var h = window.innerHeight;
+
+	var maxWidth = 500;
+
+	var W_ = w+(maxWidth-w);
+	var H_ = (W_*(h/w));
+
+	if(w <= maxWidth){
+		W_ = w;
+		H_ = h;
+	}
+
+	var renderer = new PIXI.CanvasRenderer(W_, H_, {view:myCanvas});
 	renderer.autoResize = true;
-	renderer.backgroundColor = 0x001122;
+	renderer.backgroundColor = 0x000000;
 
 	// Create our game object
 	var game = Game( stage, renderer.width, renderer.height );
@@ -40,10 +54,10 @@ var GameClient = function( socket, stage ){
 		setTimeout(tick, tickInterval);
 	};
 
-	var animate = function(){
+	var animate = function( time ){
+		requestAnimationFrame( animate );
 		game.update();
 		renderer.render(stage);
-		requestAnimationFrame( animate );
 	};
 
 	return {

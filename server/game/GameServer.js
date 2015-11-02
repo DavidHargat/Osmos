@@ -64,7 +64,6 @@ var GameServer = function( io ){
 
 	var onConnect = function( socket ){
 		
-		console.log("LOG (GameServer::onConnect)" + socket.id);
 
 		sockets[socket.id] = socket;
 
@@ -73,7 +72,7 @@ var GameServer = function( io ){
 			socket: socket,
 			x: 50,
 			y: 50,
-			radius: 50,
+			radius: 10 + Math.round(Math.random()*10),
 			id: playerIndex
 		});
 		playerIndex++;
@@ -92,6 +91,12 @@ var GameServer = function( io ){
 
 		game.add(socket.player);
 
+		socket.emit("packet", {
+			header: "setPlayerId",
+			id: socket.player.id
+		});
+
+		console.log("LOG (GameServer::onConnect) Added Player " + socket.player.id);
 	};
 
 	return {

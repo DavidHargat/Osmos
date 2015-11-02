@@ -14,6 +14,10 @@ var Game = function( stage, width, height ){
 		return args;
 	};
 
+	// Represents which player belongs to this client.
+	var playerId = -1;
+	var myPlayer;
+
 	/** A container for all graphical entity components. */
 	var world = new PIXI.Container();
 
@@ -31,6 +35,14 @@ var Game = function( stage, width, height ){
 
 	/** A map of {Player}s to their respective ids. */
 	var playerTable = {};
+
+	/**
+	* Sets the playerIndex which determines which player the camera should follow.
+	* @param {number} i - the index.
+	*/
+	var setPlayerId = function(i){
+		playerId = i;
+	};
 
 	/**
 	* Add a Player to the playerTable.
@@ -76,6 +88,17 @@ var Game = function( stage, width, height ){
 		bubbles.push(bub);
 	};
 
+	/**
+	* Remove a bubble from the bubble list.
+	* @param {Bubble} bub
+	*/
+	var removeBubble = function(bub){
+		var i = bubbles.indexOf(bub);
+		if(i>-1){
+			bubbles.splice(i,1);
+		}
+	};
+
 	/** 
 	* updates every bubble.
 	*/
@@ -85,26 +108,24 @@ var Game = function( stage, width, height ){
 		});
 	};
 
+	var cameraFollow = function(){
+		if(playerId != -1){
+			if(!myPlayer){
+				myPlayer = getPlayer(playerId);
+			}
+			if(myPlayer){
+				camera.target(myPlayer.x(),myPlayer.y());
+				camera.update();
+			}else{
+				console.log("WARNING (Game::cameraFollow) Could not get player "+playerId);
+			}
+
+		}
+	};
 
 	var update = function(){
-
 		updateBubbles();
-
-		//camera.target(ply.x(),ply.y());
-		//camera.update();
-
-		var speed = 0.5;
-		
-		/*
-		if(keystate.left)
-			ply.accelerate(-speed,0);
-		if(keystate.right)
-			ply.accelerate(+speed,0);
-		if(keystate.up)
-			ply.accelerate(0,-speed);
-		if(keystate.down)
-			ply.accelerate(0,+speed);
-		*/
+		cameraFollow();
 	};
 
 	/**
@@ -127,6 +148,21 @@ var Game = function( stage, width, height ){
 			addBubble(bub);
 		}
 
+		var wBorder = Bubble({
+			x: 0,
+			y: 0,
+			radius: 500,
+			vx: 0,
+			vy: 0,
+			borderColor: 0xFFFFFF,
+			fillColor: 0x000000,
+			alpha: 0,
+			borderWidth: 0.1,
+			borderAlpha: 1
+		});
+
+		background.addChild(wBorder.graphics);
+
 		/*
 		ply = Bubble({
 			world: world,
@@ -146,11 +182,15 @@ var Game = function( stage, width, height ){
 	};
 
 	return {
+		setPlayerId: setPlayerId,
 		addPlayer: addPlayer,
+		addBubble: addBubble,
+		removeBubble: removeBubble,
 		removePlayer: removePlayer,
 		getPlayer: getPlayer,
 		keystate: keystate,
 		update: update,
+		world: world,
 		setup: setup
 	};
 };

@@ -3,7 +3,7 @@ var Player = require("./Player.js");
 var Game = function( server ){
 	
 	// setTimeout update interval.
-	var setTimeoutInterval = 50;
+	var setTimeoutInterval = 30;
 
 	// Whether or not the game should be updating.
 	var running = false;

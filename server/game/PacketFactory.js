@@ -14,8 +14,8 @@ var PacketFactory = function(){
 			y: ply.position.y,
 			radius: ply.getRadius(),
 			borderColor: 0xFFFFFF,
-			fillColor: 0x000000,
-			alpha: 0.3,
+			fillColor: 0x999999,
+			alpha: 0.75,
 			id: ply.id
 		};
 
@@ -42,6 +42,7 @@ var PacketFactory = function(){
 			header: "update",
 			x: ply.position.x,
 			y: ply.position.y,
+			radius: ply.getRadius(),
 			id: ply.id
 		};
 	};

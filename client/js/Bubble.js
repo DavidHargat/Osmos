@@ -4,16 +4,18 @@ var Bubble = function( options ){
 	var graphics = parent.graphics,
 		update   = parent.update,
 		move     = parent.move,
-		radius_  = options.radius,
 		vx       = options.vx || 0,
 		vy       = options.vy || 0,
 		color    = options.color,
-		alpha    = options.alpha || 1,
+		alpha    = options.alpha || 0,
+		borderAlpha = options.borderAlpha || options.alpha || 1,
 		borderWidth = options.borderWidth || 1,
 		bubbleList = options.bubbleList;
 
+	parent.radius = options.radius;
+
 	var createGraphics = function(){
-		var r = radius_;
+		var r = 10;
 		var fillColor = options.fillColor; 
 		var borderColor = options.borderColor;
 
@@ -23,7 +25,7 @@ var Bubble = function( options ){
 		fill.endFill();
 
 		var border = new PIXI.Graphics();
-		border.lineStyle(borderWidth, borderColor, alpha);
+		border.lineStyle(borderWidth, borderColor, borderAlpha);
 		border.drawCircle(0, 0, r);   //(x,y,radius)		
 		border.endFill();
 
@@ -31,7 +33,6 @@ var Bubble = function( options ){
 		graphics.addChild(border);	
 	};
 	createGraphics();
-
 
 	var accelerate;
 
@@ -46,6 +47,18 @@ var Bubble = function( options ){
 		vy /= 1.1;
 	};
 
+	var setRadius = function(r){
+		graphics.scale.x = r/10;
+		graphics.scale.y = r/10;
+	};
+
+	var updateRadius = function(){
+		setRadius(parent.radius);
+	};
+
+	updateRadius();
+
+	parent.updateRadius = updateRadius;
 	parent.accelerate = accelerate;
 	parent.update = update;
 
