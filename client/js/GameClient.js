@@ -11,15 +11,15 @@ var GameClient = function( socket, stage ){
 
 	var maxWidth = 500;
 
-	var W_ = w+(maxWidth-w);
-	var H_ = (W_*(h/w));
+	var CANVAS_WIDTH = w+(maxWidth-w);
+	var CANVAS_HEIGHT = (CANVAS_WIDTH*(h/w));
 
-	if(w <= maxWidth){
-		W_ = w;
-		H_ = h;
-	}
+	//if(w <= maxWidth){
+		CANVAS_WIDTH = w;
+		CANVAS_HEIGHT = h;
+	//}
 
-	var renderer = new PIXI.CanvasRenderer(W_, H_, {view:myCanvas});
+	var renderer = new PIXI.CanvasRenderer(CANVAS_WIDTH, CANVAS_HEIGHT, {view:myCanvas});
 	renderer.autoResize = true;
 	renderer.backgroundColor = 0x000000;
 

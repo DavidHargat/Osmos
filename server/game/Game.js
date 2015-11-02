@@ -1,9 +1,6 @@
 var Player = require("./Player.js");
 
 var Game = function( server ){
-	
-	// setTimeout update interval.
-	var setTimeoutInterval = 60;
 
 	// Whether or not the game should be updating.
 	var running = false;
@@ -53,10 +50,10 @@ var Game = function( server ){
 			update();
 			callbacks.tick();
 		}
-		setTimeout(tick,setTimeoutInterval);
 	};
 	var start = function(){
 		running = true;
+
 	};
 	var stop = function(){
 		running = false;

@@ -65,7 +65,7 @@ var Player = function( options ){
 	};
 
 	var update = function( players ){
-		var speed = 1;
+		var speed = 0.25;
 
 		// input/acceleration
 		if( controller.up    ) velocity.y -= speed;

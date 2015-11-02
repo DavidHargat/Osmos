@@ -6,8 +6,11 @@ var Game          = require('./Game.js'),
 var GameServer = function( io ){
 
 	var game   = Game();
+
 	var PacketHandler_ = PacketHandler( game );
+	
 	var PacketFactory_ = PacketFactory();
+
 	var packets = [];
 	var sockets = {};
 	var playerIndex = 0;
@@ -43,12 +46,19 @@ var GameServer = function( io ){
 			packets.push(PacketFactory_.update(ply));
 		});
 
-		game.on('tick', function(){
-			sendAll();
-		});
-
-		game.tick();
+		//game.on('tick', function(){
+			//sendAll();
+		//});
+	
+		//game.tick();
+		
 		game.start();
+
+		var tickInterval = 1000/60;
+		var netInterval = 40;
+
+		setInterval(game.tick, tickInterval);
+		setInterval(sendAll, netInterval);
 	};
 
 	var onDisconnect = function( socket ){
