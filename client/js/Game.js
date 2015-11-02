@@ -19,7 +19,7 @@ var Game = function( stage ){
 
 	var background = new PIXI.Container();
 
-	var camera = new Camera( world );
+	var camera = new Camera( world, renderer.width, renderer.height );
 
 	var keystate = Keyboard().state;
 
@@ -99,12 +99,15 @@ var Game = function( stage ){
 	var ply;
 
 	var update = function(){
+
 		updateClientList();
+
 		camera.target(ply.x(),ply.y());
 		camera.update();
 
 		var speed = 0.5;
 
+		
 		if(keystate.left)
 			ply.accelerate(-speed,0);
 		if(keystate.right)
@@ -113,6 +116,7 @@ var Game = function( stage ){
 			ply.accelerate(0,-speed);
 		if(keystate.down)
 			ply.accelerate(0,+speed);
+
 	};
 
 	/**
@@ -133,7 +137,8 @@ var Game = function( stage ){
 			addClientEntity(e);
 		}
 
-		ply = new Bubble({
+		
+		ply = Bubble({
 			world: world,
 			x: renderer.width/2,
 			y: renderer.height/2,
@@ -145,8 +150,9 @@ var Game = function( stage ){
 		});
 
 		camera.set(ply.x(),ply.y());
-
+	
 		addClientEntity(ply);
+		
 	};
 
 	return {

@@ -1,4 +1,4 @@
-var game,renderer;
+var game, renderer;
 
 window.addEventListener('load',function(){
 	var socket = io();
@@ -6,11 +6,6 @@ window.addEventListener('load',function(){
 	
 	// create an new instance of a pixi stage
 	var stage = new PIXI.Stage(0xFF0000);
-	game = Game( stage );
-
-	socket.on('packet',function(packet){
-		game.handlePacket(packet);
-	});
 
 	// create a renderer instance.
 	// renderer = PIXI.autoDetectRenderer(800, 600);
@@ -22,6 +17,13 @@ window.addEventListener('load',function(){
 	var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
 	//renderer.resize(w,h);
 	renderer.backgroundColor = 0x001122;
+	
+	game = Game( stage );
+
+	socket.on('packet',function(packet){
+		game.handlePacket(packet);
+	});
+	
 	game.setup();
 
 	// add the renderer view element to the DOM
