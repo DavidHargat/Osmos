@@ -49,9 +49,8 @@ var Entity = function( options ){
 	addToWorld = true;
 
 	var has_ = function(v){return !(typeof(v)==="undefined");};
-	if( has_(options.x)      ) x(options.x);
-	if( has_(options.y)      ) y(options.y);
-	//console.log(x(),y());
+	if( has_(options.x) ) x(options.x);
+	if( has_(options.y) ) y(options.y);
 
 	return {
 		x: x,

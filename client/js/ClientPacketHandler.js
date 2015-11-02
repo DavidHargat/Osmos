@@ -6,11 +6,16 @@ var ClientPacketHandler = function( game ){
 
 	var update = function( packet ){
 		var ply = game.getPlayer(packet.id);
-		ply.pos(packet.x, packet.y);
+		if(ply){
+			ply.pos(packet.x, packet.y);
+		}else{
+			console.log("WARNING (ClientPacketHandler::update) Attempted to update unindex player " + packet.id);
+		}
 	};
 
 	var add = function( packet ){
-		var player = Player(packet.options);
+		console.log("LOG (ClientPacketHandler::add) Added Player: " + packet.options.id);
+		var player = PlayerBubble(packet.options);
 		game.addPlayer(player);
 	};
 
@@ -21,11 +26,20 @@ var ClientPacketHandler = function( game ){
 		}
 	};
 
+	var list = function( packet ){
+		packet.list.forEach(function(packet_){
+			handle(packet_);
+		});
+	};
+
 	var handle = function( packet ){
+		//console.log(packet);
+
 		var router = {
 			update: update,
 			add: add,
-			remove: remove
+			remove: remove,
+			list: list
 		};
 
 		if( router[packet.header] ){

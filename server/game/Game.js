@@ -42,7 +42,7 @@ var Game = function( server ){
 		callbacks.remove(ply);
 	};
 	var update = function(){
-		players.onEach(function(e){
+		players.forEach(function(e){
 			// Players need to know about eachother to update
 			e.update( players );
 			callbacks.update(e);
@@ -62,6 +62,8 @@ var Game = function( server ){
 		running = false;
 	};
 	return {
+		add: add,
+		remove: remove,
 		update: update,
 		tick: tick,
 		start: start,
@@ -70,3 +72,5 @@ var Game = function( server ){
 		on: on
 	};
 };
+
+module.exports = Game;

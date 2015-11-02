@@ -61,6 +61,7 @@ var Game = function( stage, width, height ){
 	*/
 	var removePlayer = function(ent){
 		if( playerTable[ent.id] ){
+			world.removeChild(ent.graphics);
 			delete playerTable[ent.id];	
 		}else{
 			console.log("ERROR (Game::removePlayer) Entity was not found in playerTable.");
@@ -84,17 +85,17 @@ var Game = function( stage, width, height ){
 		});
 	};
 
-	var ply;
 
 	var update = function(){
 
 		updateBubbles();
 
-		camera.target(ply.x(),ply.y());
-		camera.update();
+		//camera.target(ply.x(),ply.y());
+		//camera.update();
 
 		var speed = 0.5;
 		
+		/*
 		if(keystate.left)
 			ply.accelerate(-speed,0);
 		if(keystate.right)
@@ -103,7 +104,7 @@ var Game = function( stage, width, height ){
 			ply.accelerate(0,-speed);
 		if(keystate.down)
 			ply.accelerate(0,+speed);
-
+		*/
 	};
 
 	/**
@@ -126,6 +127,7 @@ var Game = function( stage, width, height ){
 			addBubble(bub);
 		}
 
+		/*
 		ply = Bubble({
 			world: world,
 			x: width/2,
@@ -136,24 +138,18 @@ var Game = function( stage, width, height ){
 			alpha: 0.5,
 			borderWidth: 4
 		});
-
 		camera.set(ply.x(),ply.y());
 		world.addChild(ply.graphics);
 		addBubble(ply);
+		*/
 		
 	};
 
 	return {
-		stage: stage,
-		world: world,
-		keystate: keystate,
-		background: background,
-		camera: camera,
 		addPlayer: addPlayer,
 		removePlayer: removePlayer,
 		getPlayer: getPlayer,
-		bubbles: bubbles,
-		updateBubbles: updateBubbles,
+		keystate: keystate,
 		update: update,
 		setup: setup
 	};

@@ -15,12 +15,20 @@ var PacketFactory = function(){
 			radius: ply.getRadius(),
 			borderColor: 0xFFFFFF,
 			fillColor: 0x000000,
-			alpha: 0.3
+			alpha: 0.3,
+			id: ply.id
 		};
 
 		return {
 			header: "add",
 			options: options
+		};
+	};
+
+	var remove = function( ply ){
+		return {
+			header: "remove",
+			id: ply.id
 		};
 	};
 
@@ -34,7 +42,7 @@ var PacketFactory = function(){
 			header: "update",
 			x: ply.position.x,
 			y: ply.position.y,
-			id: ply.position.id
+			id: ply.id
 		};
 	};
 
@@ -49,14 +57,18 @@ var PacketFactory = function(){
 		game.players.forEach(function(ply){
 			packets.push(add(ply));
 		});
-		return packets;
+		return {
+			header: "list",
+			list: packets
+		};
 	};
 
 	return {
 		add: add,
-		position: position,
+		remove: remove,
+		update: update,
 		state: state
 	};
 };
 
-modules.exports = PacketFactory;
+module.exports = PacketFactory;

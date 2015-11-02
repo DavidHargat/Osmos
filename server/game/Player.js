@@ -39,12 +39,12 @@ var Player = function( options ){
 		if( controller.right ) velocity.x += speed;
 
 		// drag
-		velocity.x /= 1.01;
-		velocity.y /= 1.01;
+		velocity.x /= 1.1;
+		velocity.y /= 1.1;
 
 		// move
 		position.x += velocity.x;
-		positoin.y += velocity.y;
+		position.y += velocity.y;
 
 	};
 
@@ -81,4 +81,4 @@ var Player = function( options ){
 	};
 };
 
-modules.exports = Player;
+module.exports = Player;

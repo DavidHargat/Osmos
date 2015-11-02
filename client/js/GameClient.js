@@ -1,5 +1,7 @@
 var GameClient = function( socket, stage ){
 
+	var tickInterval = 100;
+
 	// Setup PIXI
 	var myCanvas = document.getElementById("canvas");
 	var stage = new PIXI.Stage(0xFFFFFF);
@@ -35,7 +37,7 @@ var GameClient = function( socket, stage ){
 			right: game.keystate.right,
 		});
 
-		setTimeout(tick, 100);
+		setTimeout(tick, tickInterval);
 	};
 
 	var animate = function(){

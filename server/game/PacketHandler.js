@@ -44,4 +44,10 @@ var PacketHandler = function( game ){
 
 	};
 
+	return {
+		handle: handle
+	};
+
 };
+
+module.exports = PacketHandler;

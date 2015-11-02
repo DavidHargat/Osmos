@@ -1,5 +1,6 @@
 var Game          = require('./Game.js'),
 	PacketHandler = require('./PacketHandler.js'),
+	Player        = require('./Player.js'),
 	PacketFactory = require("./PacketFactory");
 
 var GameServer = function( io ){
@@ -10,6 +11,7 @@ var GameServer = function( io ){
 	var PacketFactory_ = PacketFactory();
 	var packets = [];
 	var sockets = {};
+	var playerIndex = 0;
 
 	/**
 	* Emits the accumulated packets to every client.
@@ -35,19 +37,24 @@ var GameServer = function( io ){
 
 		// When a player is updated, add a packet to the list.
 		game.on('update', function( ply ){
-			packets.push(PacketFactory_.position(ply));
+			packets.push(PacketFactory_.update(ply));
 		});
 
 		game.on('tick', function(){
 			sendAll();
 		});
+
+		game.tick();
+		game.start();
 	};
 
 	var onDisconnect = function( socket ){
 		console.log("LOG (GameServer::onDisconnect)" + socket.id);
 		if(sockets[socket.id]){
 			if(socket.player){
-				game.removePlayer(socket.player);
+				game.remove(socket.player);
+				console.log("LOG (GameServer::onDisconnect) Removed Player " + socket.player.id);
+			}else{
 			}
 			delete sockets[socket.id];
 		}else{
@@ -63,8 +70,13 @@ var GameServer = function( io ){
 
 		// Initialize player
 		socket.player = Player({
-			socket: socket
+			socket: socket,
+			x: 50,
+			y: 50,
+			radius: 50,
+			id: playerIndex
 		});
+		playerIndex++;
 
 		// Add socket event listener
 		socket.on("packet", function(packet){
@@ -76,15 +88,16 @@ var GameServer = function( io ){
 		});
 
 		var state = PacketFactory_.state(game);
-		socket.emit("packet-list", state);
+		socket.emit("packet", state);
 
-		game.addPlayer(socket.player);
+		game.add(socket.player);
 
 	};
 
 	return {
-		onConnect: onConnect
+		onConnect: onConnect,
+		setup: setup
 	};
 };
 
-modules.exports = GameServer;
+module.exports = GameServer;
