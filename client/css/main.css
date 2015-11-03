@@ -29,7 +29,7 @@ body, html{
 
 #leaderboard h1{
 	color: white;
-	font-size: 24px;
+	font-size: 16px;
 }
 
 #leaderboard ul{
@@ -43,15 +43,16 @@ body, html{
 #leaderboard ul li{
 	margin: 0;
 	color: rgba(255,255,255,0.5);
-	font-size: 24px;
+	font-size: 16px;
 	text-align: center;
-	background-color: rgba(0,0,255,0.1);
-	border-radius: 8px;
+	background-color: rgba(75,75,225,0.1);
+	margin-top: 2px;
+	padding: 4px;
 }
 
 
 #leaderboard ul li:nth-child(odd){
-	background-color: rgba(100,100,200,0.1);
+	background-color: rgba(75,225,75,0.1);
 }
 
 .login{

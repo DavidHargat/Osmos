@@ -7,7 +7,7 @@ var PlayerBubble = function( options ){
 	var targetX = 0;
 	var targetY = 0;
 
-	var text = new PIXI.Text(parent.name, {font:"24px Arial", fill:"white"});
+	var text = new PIXI.Text(parent.name, {font:"48px Arial", fill:"white"});
 	text.anchor.set(0.5,0.5);
 	text.scale.set(0.1,0.1);
 	parent.graphics.addChild(text);

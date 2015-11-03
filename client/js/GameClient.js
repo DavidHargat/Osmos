@@ -1,3 +1,36 @@
+var GameUI = function(){
+	var board = document.getElementById("leaderboard");
+	
+	var list = document.getElementById("list");
+
+	var showLeaderboard = function(){
+		board.style.visibility = "visible";
+	};
+
+	var hideLeaderboard = function(){
+		board.style.visibility = "invisible";
+	};
+
+	var setLeaderboard = function(playerList){
+		// Remove current list
+		while( list.firstChild )
+			list.removeChild(list.firstChild);
+
+		playerList.forEach(function(name,index){
+			var str = name;
+			var element = document.createElement("li");
+			element.textContent = str;
+			list.appendChild(element);
+		});
+	};
+
+	return {
+		showLeaderboard: showLeaderboard,
+		hideLeaderboard: hideLeaderboard,
+		setLeaderboard: setLeaderboard
+	};
+};
+
 var GameClient = function( socket, stage ){
 
 	var tickInterval = 20;
@@ -11,8 +44,9 @@ var GameClient = function( socket, stage ){
 
 	var maxWidth = 600;
 
-	var board = document.getElementById("leaderboard");
-	board.style.visibility = "visible";
+	var ui = GameUI();
+	ui.showLeaderboard();
+
 
 	var CANVAS_WIDTH = w+(maxWidth-w);
 	var CANVAS_HEIGHT = (CANVAS_WIDTH*(h/w));
@@ -70,7 +104,8 @@ var GameClient = function( socket, stage ){
 	return {
 		game: game,
 		start: start,
-		packetHandler: packetHandler
+		packetHandler: packetHandler,
+		ui: ui
 	};
 
 };
