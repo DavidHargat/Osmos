@@ -16,7 +16,8 @@ var PacketFactory = function(){
 			borderColor: 0xFFFFFF,
 			fillColor: 0x999999,
 			alpha: 0.75,
-			id: ply.id
+			id: ply.id,
+			name: ply.name
 		};
 
 		return {

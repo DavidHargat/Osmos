@@ -1,11 +1,16 @@
 var PlayerBubble = function( options ){
 	var parent = Bubble(options);
+
 	parent.id = options.id;
+	parent.name = options.name || "ERROR";
 
 	var targetX = 0;
 	var targetY = 0;
 
-	var running = false;
+	var text = new PIXI.Text(parent.name, {font:"24px Arial", fill:"white"});
+	text.anchor.set(0.5,0.5);
+	text.scale.set(0.1,0.1);
+	parent.graphics.addChild(text);
 
 	parent.setTarget = function(px, py){
 		targetX = px;
@@ -39,20 +44,6 @@ var PlayerBubble = function( options ){
 	};
 
 	parent.update = function(){
-
-		/*
-		if(!running){
-			var tween = new TWEEN.Tween(parent.graphics);
-			   // tween.easing(TWEEN.Easing.Elastic.InOut);
-			    tween.to({ x: targetX, y: targetY }, 10)
-			    .onComplete(function(){
-			    	running = false;
-			    })
-			    .start();
-			running = true;
-		}else{
-			//console.log("Skipping animation.");
-		}*/
 		tween();
 	    parent.updateRadius();
 

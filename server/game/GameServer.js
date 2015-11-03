@@ -1,11 +1,11 @@
-var Game          = require('./Game.js'),
-	PacketHandler = require('./PacketHandler.js'),
-	Player        = require('./Player.js'),
-	PacketFactory = require("./PacketFactory");
+var Game = require('./Game.js');
+var PacketHandler = require('./PacketHandler.js');
+var Player = require('./Player.js');
+var PacketFactory = require("./PacketFactory");
 
 var GameServer = function( io ){
 
-	var game   = Game();
+	var game = Game();
 
 	var PacketHandler_ = PacketHandler( game );
 	
@@ -46,6 +46,7 @@ var GameServer = function( io ){
 
 	};
 
+	// Start continously updating server
 	var run = function(){
 		var tickInterval = 1000/60;
 		var netInterval = 40;
@@ -57,9 +58,13 @@ var GameServer = function( io ){
 		setInterval(sendAll, netInterval);
 	};
 
+	// When a socket disconnects
 	var onDisconnect = function( socket ){
+		// If the socket is mapped.
 		if(sockets[socket.id]){
+			// If they have a player, and that player is 'active' (Added to the game)
 			if(socket.player && socket.player.active){
+				// Remove the player, log to console
 				game.remove(socket.player);
 				console.log(
 					"LOG (GameServer::onDisconnect) Removed Player " 
@@ -68,12 +73,13 @@ var GameServer = function( io ){
 					+ socket.player.name
 				);
 			}
-			delete sockets[socket.id];
+			delete sockets[socket.id]; // Unmap the socket.
 		}else{
 			console.log("WARNING (GameServer::onDisconnect) Attempted to remove unmapped socket.");
 		}
 	};
 
+	// When a socket connects
 	var onConnect = function( socket ){
 
 		// Remember this socket
@@ -85,7 +91,7 @@ var GameServer = function( io ){
 			socket: socket,
 			x: 50,
 			y: 50,
-			radius: 10 + Math.round(Math.random()*10),
+			radius: 20 + Math.round(Math.random()*10),
 			id: playerIndex
 		});
 		newPlayer.active = false;
@@ -116,7 +122,7 @@ var GameServer = function( io ){
 		};
 
 		var checkName = function( name ){
-			// begin ERROR CHECKING
+			// <ERROR CHECKING>
 			if( !(typeof(name)==="string") ){ 
 				// If it's not a string
 				socket.emit('name-invalid',"Data was not a string.");
@@ -132,7 +138,7 @@ var GameServer = function( io ){
 				socket.emit('name-invalid',"Please enter a name no more than 16 letters long.");
 				return;
 			} 
-			// end ERROR CHECKING
+			// </ERROR CHECKING>
 
 			// We know they have a valid name at this point
 			socket.player.name = name;
@@ -147,11 +153,12 @@ var GameServer = function( io ){
 			socket.emit('start-client');
 		};
 
-		// Handle disconnection
+		// When the client disconnects.
 		socket.on('disconnect', function(){
 			onDisconnect(socket);
 		});
 
+		// When the client sends us their name.
 		socket.on('name',checkName);
 	};
 
