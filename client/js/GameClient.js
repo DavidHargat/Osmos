@@ -11,6 +11,9 @@ var GameClient = function( socket, stage ){
 
 	var maxWidth = 600;
 
+	var board = document.getElementById("leaderboard");
+	board.style.visibility = "visible";
+
 	var CANVAS_WIDTH = w+(maxWidth-w);
 	var CANVAS_HEIGHT = (CANVAS_WIDTH*(h/w));
 
