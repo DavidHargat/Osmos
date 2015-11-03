@@ -46,11 +46,11 @@ var Game = function( server ){
 	* @param {Player} ply - the player to remove.
 	*/
 	var remove = function( ply ){
-		var i = players.indexOf(ply);
+		var i = players.indexOf( ply );
 		if(i>-1){
 			players.splice(i,1);
 		}else{
-			console.log("WARNING (Game::remove) Attempted to remove non-indexed player", ply);
+			console.log("WARNING (Game::remove) Attempted to remove non-indexed player " + ply.id);
 		}
 		callbacks.remove(ply);
 	};

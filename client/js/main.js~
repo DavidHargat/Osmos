@@ -1,0 +1,48 @@
+// main.js
+// Test with vim.
+
+var game,socket,nameElement,titleElement;
+var running = false;
+
+var sendName = function(){
+	var n = nameElement.value;
+	socket.emit('packet', {
+		header: 'name',
+		name: n
+	});
+};
+
+var removeElement = function( element ){
+	element.parentElement.removeChild(element);
+};
+
+var startClient = function(){
+	var client = GameClient( socket );
+	client.start();
+	game = client;
+	running = true;
+};
+
+window.addEventListener('load',function(){
+	socket = io();
+	nameElement = document.getElementById("name");
+	titleElement = document.getElementById("title");
+
+	socket.on('start', function(){
+		removeElement(nameElement.parent);
+		startClient();
+	});
+
+	socket.on('invalid', function(msg){
+		titleElement.textContent = msg;
+	});
+
+	nameElement.addEventListener('keydown',function(e){
+		if(e.keyCode == 13 && !running){ // enter
+			var name = nameElement.value;
+			console.log(nameElement.value);		
+			sendName();
+		}
+	});
+});
+

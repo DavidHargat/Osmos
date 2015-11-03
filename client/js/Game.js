@@ -54,6 +54,11 @@ var Game = function( stage, width, height ){
 			playerTable[ply.id]=ply;
 		});
 	};
+
+	var hasPlayer = function(id){
+		return !(typeof(playerTable[id])==="undefined");
+	};
+
 	/**
 	* Gets a {Player} from the playerTable, returns 
 	* undefined if the given id is not found.
@@ -63,7 +68,7 @@ var Game = function( stage, width, height ){
 		if( playerTable[id] ){
 			return playerTable[id];
 		}else{
-			console.log("ERROR (Game::getPlayer) Attempted to get an invalid id '" + id + "'");
+			console.log("WARNING (Game::getPlayer) Attempted to get an invalid id '" + id + "'");
 			return;
 		}
 	};
@@ -114,12 +119,11 @@ var Game = function( stage, width, height ){
 				myPlayer = getPlayer(playerId);
 			}
 			if(myPlayer){
-				camera.target(myPlayer.x(),myPlayer.y());
+				camera.target(myPlayer.x(), myPlayer.y());
 				camera.update();
 			}else{
 				console.log("WARNING (Game::cameraFollow) Could not get player "+playerId);
 			}
-
 		}
 	};
 
@@ -167,6 +171,7 @@ var Game = function( stage, width, height ){
 	return {
 		setPlayerId: setPlayerId,
 		addPlayer: addPlayer,
+		hasPlayer: hasPlayer,
 		addBubble: addBubble,
 		removeBubble: removeBubble,
 		removePlayer: removePlayer,

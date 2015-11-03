@@ -5,14 +5,57 @@ body, html{
 	height: 100%;
 	background-color: #000f0f;
 	overflow: hidden;
+	font-family: arial;
+}
+
+.login{
+	width: 50%;
+	height: 30%;
+	left: 25%;
+	top: 25%;
+	background-color: rgba(255,255,255,0.25);
+	color: black;
+	border: solid 1px black;
+	position: absolute;
+	border-radius: 4px;
+}
+
+.red-shadow{
+	-webkit-box-shadow: 0px 0px 8px 0px rgba(255,255,255,1);
+	-moz-box-shadow: 0px 0px 8px 0px rgba(255,255,255,1);
+	box-shadow: 0px 0px 8px 0px rgba(255,255,255,1);
 }
 
 h1{
 	margin: 0;
 	padding: 0;
-	color: white;
+	margin-top: 4%;
+	color: black;
 	font-family: arial;
 	text-align: center;
+}
+
+.login-name{
+	color: black;
+	text-align: center;
+	font-size: 32px;
+	background-color: rgba(255,255,255,0.25);
+	
+	width: 80%;
+	margin: auto;
+	padding: 4px;
+	margin-top: 4%;
+	border: solid 1px white;
+	display: block;
+}
+
+.login-name:hover{
+	background-color: rgba(255,255,255,1);
+	-webkit-animation: fadeto 1s; /* Safari, Chrome and Opera > 12.1 */
+	-moz-animation: fadeto 1s; /* Firefox < 16 */
+	-ms-animation: fadeto 1s; /* Internet Explorer */
+	 -o-animation: fadeto 1s; /* Opera < 12.1 */
+	    animation: fadeto 1s;
 }
 
 #canvas{
@@ -28,4 +71,66 @@ h1{
 	/*
 	border: solid 1px white;
 	*/
+}
+
+.fadein{
+-webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+-moz-animation: fadein 2s; /* Firefox < 16 */
+-ms-animation: fadein 2s; /* Internet Explorer */
+ -o-animation: fadein 2s; /* Opera < 12.1 */
+    animation: fadein 2s;
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+
+/* Opera < 12.1 */
+@-o-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadeto {
+    from { opacity: 0.5; }
+    to   { opacity: 1; }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadeto {
+    from { opacity: 0.5; }
+    to   { opacity: 1; }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadeto {
+    from { opacity: 0.5; }
+    to   { opacity: 1; }
+}
+
+/* Opera < 12.1 */
+@-o-keyframes fadeto {
+    from { opacity: 0.5; }
+    to   { opacity: 1; }
 }

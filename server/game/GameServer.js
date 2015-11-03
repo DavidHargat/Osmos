@@ -59,9 +59,14 @@ var GameServer = function( io ){
 
 	var onDisconnect = function( socket ){
 		if(sockets[socket.id]){
-			if(socket.player){
+			if(socket.player && socket.player.active){
 				game.remove(socket.player);
-				console.log("LOG (GameServer::onDisconnect) Removed Player " + socket.player.id);
+				console.log(
+					"LOG (GameServer::onDisconnect) Removed Player " 
+					+ socket.player.id
+					+ " : "
+					+ socket.player.name
+				);
 			}
 			delete sockets[socket.id];
 		}else{
@@ -70,44 +75,84 @@ var GameServer = function( io ){
 	};
 
 	var onConnect = function( socket ){
+
+		// Remember this socket
 		sockets[socket.id] = socket;
 
-		// Initialize player
-		socket.player = Player({
+		// Create a new player object
+		// (but don't add it t othe game yet)
+		var newPlayer = Player({
 			socket: socket,
 			x: 50,
 			y: 50,
 			radius: 10 + Math.round(Math.random()*10),
 			id: playerIndex
 		});
+		newPlayer.active = false;
+
+		socket.player = newPlayer;
 
 		// Increment the playerIndex (so each player gets a unique id)
 		playerIndex++;
 
-		// Handle incoming packets
-		socket.on("packet", function(packet){
-			PacketHandler_.handle( socket, packet );
-		});
+		var setupPlayer = function(){
+			// Send the current state of the game to the new player.
+			socket.emit("packet", PacketFactory_.state(game));
+
+			// Add the player to the game.
+			game.add(newPlayer);
+			newPlayer.active = true;
+
+			// Tell the client their id.
+			socket.emit("player-id", newPlayer.id);
+
+			// start handling incoming packets
+			socket.on("packet", function(packet){
+				PacketHandler_.handle( socket, packet );
+			});
+
+			// log
+			console.log("LOG (GameServer::onConnect) Added Player " + newPlayer.id + " : " + newPlayer.name);
+		};
+
+		var checkName = function( name ){
+			// begin ERROR CHECKING
+			if( !(typeof(name)==="string") ){ 
+				// If it's not a string
+				socket.emit('name-invalid',"Data was not a string.");
+				return;
+			}
+			if( name.length<3 ){ 
+				// If it's not long enough
+				socket.emit('name-invalid',"Please enter a name at least 3 letters long.");
+				return;
+			} 
+			if( name.length>16 ){ 
+				// If it's not long enough
+				socket.emit('name-invalid',"Please enter a name no more than 16 letters long.");
+				return;
+			} 
+			// end ERROR CHECKING
+
+			// We know they have a valid name at this point
+			socket.player.name = name;
+
+			// When the client says they're ready
+			// Initialize them in the game.
+			socket.on('ready', setupPlayer);
+
+			// Tell the client they're good to go!
+			// When they're ready they emit the 'ready'
+			// message that we handle above.
+			socket.emit('start-client');
+		};
 
 		// Handle disconnection
 		socket.on('disconnect', function(){
 			onDisconnect(socket);
 		});
 
-		// Send the current state of the game to the new player.
-		socket.emit("packet", PacketFactory_.state(game));
-
-		// Add the player to the game.
-		game.add(socket.player);
-
-		// Tell the player their id.
-		socket.emit("packet", {
-			header: "setPlayerId",
-			id: socket.player.id
-		});
-
-		// log
-		console.log("LOG (GameServer::onConnect) Added Player " + socket.player.id);
+		socket.on('name',checkName);
 	};
 
 	return {

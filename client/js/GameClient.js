@@ -27,7 +27,6 @@ var GameClient = function( socket, stage ){
 	var game = Game( stage, renderer.width, renderer.height );
 	var packetHandler = ClientPacketHandler( game );
 
-
 	var start = function(){
 		// Initialize game object.
 		game.setup();
@@ -38,6 +37,11 @@ var GameClient = function( socket, stage ){
 		// Start handling packets.
 		socket.on('packet', function(packet){
 			packetHandler.handle(packet);
+		});
+		// Receive our player.id so we know who we are!
+		socket.on('player-id',function( id ){
+			game.setPlayerId( id );
+			console.log("Player ID: " + id);
 		});
 	};
 

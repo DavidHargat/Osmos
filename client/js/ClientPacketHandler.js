@@ -20,6 +20,15 @@ var ClientPacketHandler = function( game ){
 
 	var add = function( packet ){
 		console.log("LOG (ClientPacketHandler::add) Added Player: " + packet.options.id);
+
+		// If this player already exists for some reason, remove it.
+		if(game.hasPlayer(packet.options.id)){
+			console.log("WARNING (ClientPacketHandler::add) Attempted to add a player which already exists " + packet.options.id);
+			var oldPlayer = game.getPlayer(packet.options.id);
+			game.removePlayer(oldPlayer);
+			game.removeBubble(oldPlayer);
+		}
+
 		var player = PlayerBubble(packet.options);
 		game.addPlayer(player);
 		game.addBubble(player);
