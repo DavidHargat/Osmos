@@ -34,6 +34,10 @@ var Game = function( stage, width, height ){
 		playerId = i;
 	};
 
+	var getPlayerId = function(){
+		return playerId;
+	};
+
 	/**
 	* Add a Player to the playerTable.
 	* @param {...}
@@ -169,6 +173,7 @@ var Game = function( stage, width, height ){
 
 	return {
 		setPlayerId: setPlayerId,
+		getPlayerId: getPlayerId,
 		addPlayer: addPlayer,
 		hasPlayer: hasPlayer,
 		addBubble: addBubble,

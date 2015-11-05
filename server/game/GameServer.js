@@ -48,23 +48,8 @@ var GameServer = function( io ){
 
 	var lastboard;
 
-	var updateLeaderboard = function(){
-		/* 
-		* Compare the current leaderboard to the last
-		* leaderboard, if we find a difference, send it
-		* to the client. 
-		*/
-		var board = game.getLeaderboard();
-		if( lastboard ){	
-			var changed = false;
-			board.forEach(function(e,i){
-				if(e!=lastboard[i])
-					changed = true;
-			});
-			if( changed ) io.emit('update-leaderboard', board);	
-		}else{
-			io.emit('update-leaderboard', board);
-		}
+	var updateLeaderboard = function(){	
+		io.emit('update-leaderboard', game.getLeaderboard());
 	};
 
 	// Start continously updating server

@@ -10,7 +10,6 @@ var PlayerBubble = function( options ){
 	var text = new PIXI.Text(parent.name, {font:"48px Arial", fill:"white"});
 	text.anchor.set(0.5,0.5);
 	text.scale.set(0.1,0.1);
-	
 	parent.graphics.addChild(text);
 
 	parent.setTarget = function(px, py){
@@ -46,8 +45,8 @@ var PlayerBubble = function( options ){
 
 	parent.update = function(){
 		tween();
-		parent.updateRadius();
-	};
+	    parent.updateRadius();
 
+	};
 	return parent;
 };

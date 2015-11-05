@@ -37,7 +37,8 @@ var GameUI = function(){
 		showLeaderboard: showLeaderboard,
 		hideLeaderboard: hideLeaderboard,
 		setLeaderboard: setLeaderboard,
-		hideLoseMessage: hideLoseMessage
+		hideLoseMessage: hideLoseMessage,
+		showLoseMessage: showLoseMessage
 	};
 };
 
@@ -53,6 +54,8 @@ var GameClient = function( socket, stage ){
 	var h = window.innerHeight;
 
 	var maxWidth = 600;
+
+	var lose = false;
 
 	var ui = GameUI();
 	ui.showLeaderboard();
@@ -73,6 +76,20 @@ var GameClient = function( socket, stage ){
 	// Create our game object
 	var game = Game( stage, renderer.width, renderer.height );
 	var packetHandler = ClientPacketHandler( game );
+	
+	// Check if the player has 'lost', if so, display the lose message.
+	// Probably want to move this to the Game object.
+	var checkLose = function(){
+		var id = game.getPlayerId();
+		var player = game.getPlayer(id);
+		if(player){
+			if(player.radius<=0 && !lose){
+				lose = true;
+				ui.showLoseMessage();		
+			}
+		}
+		
+	};
 
 	var start = function(){
 		// Initialize game object.
@@ -110,6 +127,8 @@ var GameClient = function( socket, stage ){
 			left: game.keystate.left,
 			right: game.keystate.right,
 		});
+		
+		checkLose();
 
 		setTimeout(tick, tickInterval);
 	};

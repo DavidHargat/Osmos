@@ -34,7 +34,9 @@ var Bubble = function( options ){
 	};
 	createGraphics();
 
-	var accelerate = function(px,py){
+	var accelerate;
+
+	accelerate = function(px,py){
 		vx += px;
 		vy += py;
 	};

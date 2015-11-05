@@ -11,7 +11,9 @@ var ClientPacketHandler = function( game ){
 			ply.setTarget(packet.x,packet.y);
 			if(packet.radius != ply.radius){
 				ply.radius = packet.radius;
-				console.log(ply.radius);
+				if(ply.radius <= 0){
+					game.ui.showLoseMessage();
+				}
 			}
 		}else{
 			console.log("WARNING (ClientPacketHandler::update) Attempted to update unindex player " + packet.id);

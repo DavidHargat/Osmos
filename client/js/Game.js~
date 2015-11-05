@@ -34,6 +34,10 @@ var Game = function( stage, width, height ){
 		playerId = i;
 	};
 
+	var getPlayerId = function(){
+		return playerId;
+	};
+
 	/**
 	* Add a Player to the playerTable.
 	* @param {...}
@@ -133,10 +137,12 @@ var Game = function( stage, width, height ){
 	*/
 	var setup = function(){
 		
+		// Add a blur filter to the background bubbles	
 		var f = new PIXI.filters.BlurFilter();
 		f.blur  = 2;
 		background.filters = [f];
-	
+		
+		// creates N random bubbles in the 'background' layer
 		for(var i=0;i<16;i++){
 			var bub = RandomBubble({
 				world: world,
@@ -147,7 +153,8 @@ var Game = function( stage, width, height ){
 			background.addChild(bub.graphics);
 			addBubble(bub);
 		}
-
+		
+		// create the world border (circular white outline)
 		var wBorder = Bubble({
 			x: 0,
 			y: 0,
