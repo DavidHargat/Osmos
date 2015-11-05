@@ -37,7 +37,7 @@ body, html{
 	
 	text-align: center;
 
-	visibility: hidden;
+	visibility: invisible;
 	color: red;
 
 	position: absolute;

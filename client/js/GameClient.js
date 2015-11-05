@@ -1,6 +1,7 @@
 var GameUI = function(){
 	var board = document.getElementById("leaderboard");
-	
+	var loseMessage = document.getElementById("lose-message");
+
 	var list = document.getElementById("list");
 
 	var showLeaderboard = function(){
@@ -8,9 +9,17 @@ var GameUI = function(){
 	};
 
 	var hideLeaderboard = function(){
-		board.style.visibility = "invisible";
+		board.style.visibility = "hidden";
 	};
 
+	var showLoseMessage = function(){
+		loseMessage.style.visibility = "visible";
+	};
+	
+	var hideLoseMessage = function(){
+		loseMessage.style.visibility = "hidden";
+	};
+	
 	var setLeaderboard = function(playerList){
 		// Remove current list
 		while( list.firstChild )
@@ -27,7 +36,8 @@ var GameUI = function(){
 	return {
 		showLeaderboard: showLeaderboard,
 		hideLeaderboard: hideLeaderboard,
-		setLeaderboard: setLeaderboard
+		setLeaderboard: setLeaderboard,
+		hideLoseMessage: hideLoseMessage
 	};
 };
 
@@ -46,7 +56,7 @@ var GameClient = function( socket, stage ){
 
 	var ui = GameUI();
 	ui.showLeaderboard();
-
+	ui.hideLoseMessage();
 
 	var CANVAS_WIDTH = w+(maxWidth-w);
 	var CANVAS_HEIGHT = (CANVAS_WIDTH*(h/w));

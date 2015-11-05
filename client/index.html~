@@ -22,7 +22,7 @@
 			</ul>
 		</div>
 		<div id="lose-message">
-			YOU WERE CONSUMED	
+			You were consumed!
 		</div>
 		<canvas id="canvas"  width="800" height="600"></canvas>
 		<script src="/socket.io/socket.io.js"></script>

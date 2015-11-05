@@ -1,6 +1,7 @@
 var GameUI = function(){
 	var board = document.getElementById("leaderboard");
-	
+	var loseMessage = document.getElementById("lose-message");
+
 	var list = document.getElementById("list");
 
 	var showLeaderboard = function(){
@@ -8,9 +9,17 @@ var GameUI = function(){
 	};
 
 	var hideLeaderboard = function(){
-		board.style.visibility = "invisible";
+		board.style.visibility = "hidden";
 	};
 
+	var showLoseMessage = function(){
+		loseMessage.style.visibility = "visible";
+	};
+	
+	var hideLoseMessage = function(){
+		loseMessage.style.visibility = "hidden";
+	};
+	
 	var setLeaderboard = function(playerList){
 		// Remove current list
 		while( list.firstChild )
@@ -46,7 +55,7 @@ var GameClient = function( socket, stage ){
 
 	var ui = GameUI();
 	ui.showLeaderboard();
-
+	ui.hideLoseMessage();
 
 	var CANVAS_WIDTH = w+(maxWidth-w);
 	var CANVAS_HEIGHT = (CANVAS_WIDTH*(h/w));
@@ -85,8 +94,8 @@ var GameClient = function( socket, stage ){
 			// The data we're expecting is a list of player id's.
 			// so forEach id we grab the corresponding player,
 			// and from that player we grab their name.
-			ui.setLeaderboard(data.map(function(){
-				return game.getPlayer(data).name;
+			ui.setLeaderboard(data.map(function(id){
+				return game.getPlayer(id).name;
 			}));
 		});
 	};
