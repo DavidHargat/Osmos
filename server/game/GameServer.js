@@ -45,16 +45,33 @@ var GameServer = function( io ){
 		});
 
 	};
-	
+
+	var lastboard;
+
 	var updateLeaderboard = function(){
-		io.emit('update-leaderboard', game.getLeaderboard());
+		/* 
+		* Compare the current leaderboard to the last
+		* leaderboard, if we find a difference, send it
+		* to the client. 
+		*/
+		var board = game.getLeaderboard();
+		if( lastboard ){	
+			var changed = false;
+			board.forEach(function(e,i){
+				if(e!=lastboard[i])
+					changed = true;
+			});
+			if( changed ) io.emit('update-leaderboard', board);	
+		}else{
+			io.emit('update-leaderboard', board);
+		}
 	};
 
 	// Start continously updating server
 	var run = function(){
 		var tickInterval = 1000/60;
 		var netInterval = 40;
-		var leaderboardInterval = 1000;
+		var leaderboardInterval = 2000;
 
 		// Continously update the leaderboard.
 		setInterval(updateLeaderboard, leaderboardInterval);	

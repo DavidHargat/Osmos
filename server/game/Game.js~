@@ -52,7 +52,7 @@ var Game = function( server ){
 		console.log(unsorted.map(function(e){return e.getRadius();}));
 		console.log(sorted.map(function(e){return e.getRadius();}));
 	};
-	testSortByRadius();	
+	// testSortByRadius();	
 
 	/**
 	* Define a callback for a certain game event (psuedo-event?)
