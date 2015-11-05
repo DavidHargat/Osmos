@@ -85,8 +85,8 @@ var GameClient = function( socket, stage ){
 			// The data we're expecting is a list of player id's.
 			// so forEach id we grab the corresponding player,
 			// and from that player we grab their name.
-			ui.setLeaderboard(data.map(function(id){
-				return game.getPlayer(id).name;
+			ui.setLeaderboard(data.map(function(){
+				return game.getPlayer(data).name;
 			}));
 		});
 	};

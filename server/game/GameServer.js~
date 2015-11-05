@@ -56,7 +56,6 @@ var GameServer = function( io ){
 		var netInterval = 40;
 		var leaderboardInterval = 1000;
 
-		// Continously update the leaderboard.
 		setInterval(updateLeaderboard, leaderboardInterval);	
 
 		// Continously run Game update logic.
